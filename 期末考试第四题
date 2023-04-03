@@ -1,0 +1,57 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+int min_mlt(int a, int b) 
+{ 
+    int t, num1 = a, num2 = b;
+    while (t = a % b, t != 0) 
+    {
+        a = b;
+        b = t;
+    }
+    return (num1 / b) * num2;
+}
+int main() 
+{
+    int n;
+    cin >> n;
+    int num[10][2] = { 0 }, chil, moth;
+    for (int i = 0; i < n; i++) 
+    {
+        scanf("%d/%d", &chil, &moth);
+        if (moth != 0 && chil != 0) 
+        {
+            num[i][0] = chil;
+            num[i][1] = moth;
+        }
+    }
+    int j = 0, temp = 0;
+    int b, zh = 0;
+    while (j < (n - 1)) {
+        int mlt = min_mlt(num[j][1], num[j + 1][1]);
+        num[j + 1][0] = num[j][0] * mlt / num[j][1] + num[j + 1][0] * mlt / num[j + 1][1];
+        num[j + 1][1] = mlt;
+
+        zh += num[j + 1][0] / num[j + 1][1];
+        num[j + 1][0] = num[j + 1][0] % num[j + 1][1];
+        if (num[j + 1][0] != 0) {
+            b = min_mlt(num[j + 1][0], num[j + 1][1]);
+            temp = b / num[j + 1][0];
+            num[j + 1][0] = b / num[j + 1][1];
+            num[j + 1][1] = temp;
+        }
+        j++;
+    }
+    if (0 == zh && num[j][0] != 0) 
+    {
+        cout << num[j][0]; cout << "/"; cout << num[j][1];
+    }
+    else if (0 == num[j][0]) 
+    {
+        cout << zh;
+    }
+    else 
+    {
+        cout << zh; cout << num[j][0]; cout << "/"; cout << num[j][1];
+    }
+}
